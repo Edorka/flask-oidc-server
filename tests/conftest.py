@@ -46,23 +46,7 @@ def admin_user(db):
     return user
 
 
-@pytest.fixture
-def some_users(db):
-    users = []
-    for index in range(1, 3):
-        username = "user{index}"
-        user = User(
-            username=username,
-            email=f"{username}@company.com",
-            password=f"{username}-password",  # what a bad idea
-        )
-        db.session.add(user)
-        users.append(user)
-    db.session.commit()
-    return users
-
-
-def do_login(username, password, client):
+def do_login(client, username, password):
     data = {
         'username': username,
         'password': password,
@@ -82,16 +66,16 @@ def do_login(username, password, client):
 
 @pytest.fixture
 def admin_headers(admin_user, client):
-    return do_login(admin_user.username, 'admin')
+    return do_login(client, admin_user.username, 'admin')
 
 
 @pytest.fixture
 def user_headers(client):
 
-    def login(user):
-        return do_login(user.username, f"{user.username}-password", client)
+    def logged(user):
+        return do_login(client, user.username, 'mypwd')
 
-    return login
+    return logged
 
 
 @pytest.fixture
