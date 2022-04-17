@@ -1,0 +1,9 @@
+default_context:
+    project_name: "sec_api"
+    app_name: "users"
+    python_version: "3.8"
+    admin_user_username: "admin"
+    admin_user_email: "admin@challenge.com"
+    admin_user_password: "1234"
+    use_celery: "no"
+    wsgi_server: "uwsgi"
