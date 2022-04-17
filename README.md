@@ -33,7 +33,7 @@ flask run
 
 ### Giving a look to the Dcos 
 
-Use your favourite browser to access to http://localhost:5000/swagger-ui
+While the service is running, use your favourite browser to access to http://localhost:5000/swagger-ui
 
 ## Running tests
 
