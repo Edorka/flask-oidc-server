@@ -1,11 +1,15 @@
-from flask import request
+from flask import request, abort, make_response, jsonify
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from users.api.schemas import UserSchema
 from users.models import User
 from users.extensions import db
 from users.commons.pagination import paginate
 
+def has_to_be_user_or_admin(user):
+    requester = User.query.get(get_jwt_identity())
+    if requester.username != 'admin' and user.id != requester.id:
+        abort(make_response(jsonify(msg="Only admin or user can modify"), 403))
 
 class UserResource(Resource):
     """Single object resource
@@ -93,14 +97,15 @@ class UserResource(Resource):
     def put(self, user_id):
         schema = UserSchema(partial=True)
         user = User.query.get_or_404(user_id)
+        has_to_be_user_or_admin(user)
         user = schema.load(request.json, instance=user)
-
         db.session.commit()
 
         return {"msg": "user updated", "user": schema.dump(user)}
 
     def delete(self, user_id):
         user = User.query.get_or_404(user_id)
+        has_to_be_user_or_admin(user)
         db.session.delete(user)
         db.session.commit()
 

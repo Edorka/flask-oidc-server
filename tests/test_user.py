@@ -49,6 +49,17 @@ def test_put_user(client, db, user, admin_headers):
     assert pwd_context.verify("new_password", user.password)
 
 
+def test_put_user_by_another(client, db, user_factory, user_headers):
+    user, another = user_factory.create_batch(2)
+    data = {"firstname": "just", "lastname": "testing"}
+
+    user_url = url_for('api.user_by_id', user_id=user.id)
+    # test update user
+    rep = client.put(user_url, json=data, headers=user_headers(another))
+    assert rep.status_code == 403
+    assert rep.json.get('msg') == 'Only admin or user can modify'
+
+
 def test_delete_user(client, db, user, admin_headers):
     # test 404
     user_url = url_for('api.user_by_id', user_id="100000")
@@ -64,6 +75,29 @@ def test_delete_user(client, db, user, admin_headers):
     rep = client.delete(user_url,  headers=admin_headers)
     assert rep.status_code == 200
     assert db.session.query(User).filter_by(id=user.id).first() is None
+
+
+def test_delete_user_by_another(client, db, user_factory, user_headers):
+    user, another = user_factory.create_batch(2)
+    data = {"firstname": "just", "lastname": "testing"}
+
+    user_url = url_for('api.user_by_id', user_id=user.id)
+    # test update user
+    rep = client.delete(user_url, json=data, headers=user_headers(another))
+    assert rep.status_code == 403
+    assert rep.json.get('msg') == 'Only admin or user can modify'
+
+
+def test_put_user_by_another(client, db, user_factory, user_headers):
+    user, another = user_factory.create_batch(2)
+    data = {"firstname": "just", "lastname": "testing"}
+
+    user_url = url_for('api.user_by_id', user_id=user.id)
+    # test update user
+    rep = client.put(user_url, json=data, headers=user_headers(another))
+    assert rep.status_code == 403
+    assert rep.json.get('msg') == 'Only admin or user can modify'
+
 
 
 def test_create_user(client, db, admin_headers):

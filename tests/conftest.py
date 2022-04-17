@@ -56,7 +56,6 @@ def do_login(client, username, password):
         data=json.dumps(data),
         headers={'content-type': 'application/json'}
     )
-    print(dir(rep))
     tokens = json.loads(rep.get_data(as_text=True))
     return {
         'content-type': 'application/json',
