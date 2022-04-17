@@ -19,5 +19,5 @@ setup(
         "passlib",
         "apispec[yaml]",
         "apispec-webframeworks",
-    ]
+    ],
 )

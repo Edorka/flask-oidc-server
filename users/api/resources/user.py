@@ -6,10 +6,12 @@ from users.models import User
 from users.extensions import db
 from users.commons.pagination import paginate
 
+
 def has_to_be_user_or_admin(user):
     requester = User.query.get(get_jwt_identity())
-    if requester.username != 'admin' and user.id != requester.id:
+    if requester.username != "admin" and user.id != requester.id:
         abort(make_response(jsonify(msg="Only admin or user can modify"), 403))
+
 
 class UserResource(Resource):
     """Single object resource
