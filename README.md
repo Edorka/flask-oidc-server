@@ -31,6 +31,9 @@ Blacklist is Ok but not a very good choice for a microservices architecture, pro
 
 ## setup 
 
+Ensure that you have installed on your system:
+* Python 3.8
+* virtualenv
 
 To run locally a few commands have to be run:
 ```
@@ -40,6 +43,13 @@ pip install -r requirements.txt
 # or if you want to run tests an use linters
 pip install -p requirements/dev.txt
 ```
+Ensure that the following environment vars are present:
+```
+export FLASK_ENV=development
+export FLASK_APP=users.app
+export DATABASE_URI=sqlite:////tmp/test.db
+```
+
 To perform DB setup and configure an admin user:
 
 
@@ -51,6 +61,7 @@ flask init
 ```
 
 ## Running 
+
 
 ```
 source venv/bin/activate
